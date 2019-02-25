@@ -34,4 +34,21 @@ class Billet {
 		return Bdd::query($request, [$id]);
 	}
 
+	public function suppBillet($postId) {
+		$comment = new Comment();
+		$comment->suppComment($postId);
+		$request = 'DELETE FROM billet WHERE id = ?';
+		return Bdd::majBdd($request, [$postId]);
+	}
+
+	public function editBillet($title, $content, $postId) {
+		if ($postId == 0) {
+			$request = 'INSERT INTO billet(title, content, date) VALUES(?, ?, NOW())';
+			return Bdd::majBdd($request, [$title, $content]);
+		} else {
+			$request = 'UPDATE billet SET title = ?, content = ? WHERE id = ?';
+			return Bdd::majBdd($request, [$title, $content, $postId]);
+		}
+	}
+
 }

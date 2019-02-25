@@ -13,6 +13,7 @@ $navActive = isset($_GET['p']) ? $_GET['p'] : 'Accueil';
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="public/css/styles.css">
+	<script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=jpl1upzthyr8idk4ytcv6rw78s1r5n2zahqo09mx82tk2sll"></script>
 </head>
 <body cz-shortcut-listen="true">
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
@@ -41,5 +42,6 @@ $navActive = isset($_GET['p']) ? $_GET['p'] : 'Accueil';
 	<main role="main" class="container">
 		<?= $content; ?>
 	</main><!-- /.container -->
+	<script src="public/js/script.js"></script>
 </body>
 </html>

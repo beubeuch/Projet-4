@@ -14,19 +14,38 @@ if (isset($_GET['report'])) {
     header('location:index.php?p=Billet&id='.$_GET['postId']);
 }
 
+if (isset($_GET['suppPost'])) {
+    suppPost($_GET['postId']);
+    header('location:index.php?p=Admin');
+}
+
+if (isset($_POST['editPostContent'])) {
+    editPost($_POST['editPostTitle'], $_POST['editPostContent'], $_POST['editPostId']);
+    header('location:index.php?p=Admin');
+}
+
 // Affichage des pages ------------------------------------------------------
 
 ob_start();
 if(isset($_GET['p'])) {
     if(in_array($_GET['p'], App::$menus)) {
-    	if ($_GET['p'] == 'Accueil') {
-    		homePage();
-    	}
-    	elseif ($_GET['p'] == 'Billet') {
-    		billetPage();
-    	}
-    	elseif ($_GET['p'] == 'Admin') {
-            adminPage();
+        if ($_GET['p'] == 'Accueil') {
+            homePage();
+            // App::getHome();
+        }
+        elseif ($_GET['p'] == 'Billet') {
+            billetPage();
+        }
+        elseif ($_GET['p'] == 'Admin') {
+            // if (!isset($_SESSION['admin'])) {
+            //  header('location:index.php');
+            // }
+            if ($_GET['e'] == 'edit') {
+                editPage();
+            }
+            else {
+                adminPage();
+            }
         }
     }
 }

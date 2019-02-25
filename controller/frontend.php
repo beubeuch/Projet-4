@@ -22,6 +22,24 @@ function billetPage() {
 	require 'view/billetView.php';
 }
 
+function adminPage() {
+	$billet = new Billet();
+	$billetList = $billet->getLastChapters();
+	$comment = new Comment();
+	require 'view/adminView.php';
+}
+
+function editPage() {
+	$billet = new Billet();
+	if (isset($_GET['id'])) {
+		$postId = $_GET['id'];
+		$post = $billet->getBillet($_GET['id']);
+	} else {
+		$postId = 0;
+	}
+	require 'view/editView.php';
+}
+
 function newComment($postId, $content, $name) {
 	$comment = new Comment();
 	$comment->addComment($name, $content, $postId);
@@ -41,4 +59,14 @@ function reportComment($commentId) {
 	else {
 		return '2- Le commentaire à déjà été modéré, merci de contacter un administrateur';
 	}
+}
+
+function suppPost($postId) {
+	$post = new Billet();
+	return $post->suppBillet($postId);
+}
+
+function editPost($title, $content, $postId) {
+	$post = new Billet();
+	return $post->editBillet($title, $content, $postId);
 }

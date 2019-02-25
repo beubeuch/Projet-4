@@ -26,4 +26,9 @@ class Comment {
 		return Bdd::majBdd($request, [$commentId]);
 	}
 
+	public function suppComment($postId) {
+		$request = 'DELETE FROM comment WHERE billet_id = ?';
+		return Bdd::majBdd($request, [$postId]);
+	}
+
 }
