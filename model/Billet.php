@@ -24,4 +24,14 @@ class Billet {
 				</div>';
 	}
 
+	public function getLastBillet() {
+		$request = 'SELECT * FROM billet ORDER BY id DESC';
+		return Bdd::query($request);
+	}
+
+	public function getBillet($id) {
+		$request = 'SELECT * FROM billet WHERE id = ?';
+		return Bdd::query($request, [$id]);
+	}
+
 }

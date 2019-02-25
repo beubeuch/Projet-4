@@ -13,7 +13,6 @@ if(isset($_GET['p'])) {
     if(in_array($_GET['p'], App::$menus)) {
     	if ($_GET['p'] == 'Accueil') {
     		homePage();
-            // App::getHome();
     	}
     	elseif ($_GET['p'] == 'Billet') {
     		billetPage();

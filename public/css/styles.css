@@ -1,3 +1,14 @@
 .container {
 	margin-top: 80px;
 }
+
+article .comments {
+	color: #cecece;
+	font-size: 0.8em;
+}
+
+.comment-date {
+	color: #cecece;
+	font-size: 0.6em;
+	font-weight: normal;
+}
