@@ -54,4 +54,16 @@ class Bdd {
 		}
 		return $data;
 	}
+
+	public static function majBdd($request, $data = null) {
+		$bdd = self::getBdd();
+		if ($data === null) {
+			$reponse = $bdd->exec($request);
+		} else {
+			$reponse = $bdd->prepare($request);
+			$reponse->execute($data);
+		}
+		return;
+	}
+
 }

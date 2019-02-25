@@ -21,3 +21,24 @@ function billetPage() {
 
 	require 'view/billetView.php';
 }
+
+function newComment($postId, $content, $name) {
+	$comment = new Comment();
+	$comment->addComment($name, $content, $postId);
+	return 'Commentaire ajouté avec succés';
+}
+
+function reportComment($commentId) {
+	$comment = new Comment();
+	$moderate = $comment->isNull($commentId);
+	if ($moderate->moderation == null) {
+		$comment->reportComment($commentId);
+		return '0- Le commentaire à été signalé';
+	}
+	elseif ($moderate->moderation == 1) {
+		return '1- Le commentaire à déjà été signalé';
+	}
+	else {
+		return '2- Le commentaire à déjà été modéré, merci de contacter un administrateur';
+	}
+}

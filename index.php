@@ -1,10 +1,18 @@
 <?php
 require 'model/App.php';
-define(ROOT, __DIR__.'/');
-session_start();
-require 'controller/frontend.php';
-require ROOT.'model'. DIRECTORY_SEPARATOR .'Autoloader.php';
-Autoloader::register();
+App::init();
+
+// Fonctionnement du site ---------------------------------------------------
+
+if (isset($_POST['newComment'])) {
+    $_SESSION['alert'] = newComment($_GET['id'], $_POST['newComment'], $_POST['name']);
+    header('location:index.php?p=Billet&id='.$_GET['id']);
+}
+
+if (isset($_GET['report'])) {
+    $_SESSION['alert'] = reportComment($_GET['commentId']);
+    header('location:index.php?p=Billet&id='.$_GET['postId']);
+}
 
 // Affichage des pages ------------------------------------------------------
 
