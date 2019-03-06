@@ -2,7 +2,7 @@
 
 function homePage() {
 	$billet = new Billet();
-	$chapterList = $billet->getLastChapters();
+	$chapterList = $billet->getAllChapters();
 	require 'view/homeView.php';
 }
 
@@ -17,15 +17,17 @@ function billetPage() {
 	$post = $billet->getBillet($postId);
 
 	$comment = new Comment();
-	$comments = $comment->getComments($postId);
+	$comments = $comment->getPostComments($postId);
 
 	require 'view/billetView.php';
 }
 
 function adminPage() {
 	$billet = new Billet();
-	$billetList = $billet->getLastChapters();
+	$billetList = $billet->getAllChapters(true);
 	$comment = new Comment();
+	$commentList = $comment->getAllComments();
+
 	require 'view/adminView.php';
 }
 
@@ -48,12 +50,12 @@ function newComment($postId, $content, $name) {
 
 function reportComment($commentId) {
 	$comment = new Comment();
-	$moderate = $comment->isNull($commentId);
-	if ($moderate->moderation == null) {
+	$moderate = $comment->moderationIsNull($commentId);
+	if ($moderate->moderation == 1) {
 		$comment->reportComment($commentId);
 		return '0- Le commentaire à été signalé';
 	}
-	elseif ($moderate->moderation == 1) {
+	elseif ($moderate->moderation == 2) {
 		return '1- Le commentaire à déjà été signalé';
 	}
 	else {
@@ -66,7 +68,12 @@ function suppPost($postId) {
 	return $post->suppBillet($postId);
 }
 
-function editPost($title, $content, $postId) {
+function editPost($title, $content, $postId, $statut) {
 	$post = new Billet();
-	return $post->editBillet($title, $content, $postId);
+	return $post->editBillet($title, $content, $postId, $statut);
+}
+
+function validComment($commentId) {
+	$comment = new Comment();
+	return $comment->validComment($commentId);
 }

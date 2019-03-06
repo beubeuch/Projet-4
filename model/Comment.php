@@ -6,7 +6,18 @@ class Comment {
 		return Bdd::query($request, [$postId]);
 	}
 
-	public function getComments($postId) {
+	public function getAllComments() {
+		$request = 'SELECT comment.id, comment.name, comment.content, billet.title, comment_moderate.moderation_name, comment.moderation, DATE_FORMAT(comment.date, "%d/%m/%Y à %Hh") AS date
+					FROM comment
+					LEFT JOIN billet
+					ON comment.billet_id = billet.id
+					LEFT JOIN comment_moderate
+					ON comment.moderation = comment_moderate.id
+					ORDER BY comment.id DESC';
+		return Bdd::query($request, null, true);
+	}
+
+	public function getPostComments($postId) {
 		$request = 'SELECT id, name, content, DATE_FORMAT(date, "%d/%m/%Y à %Hh") AS date FROM comment WHERE billet_id = ? ORDER BY id DESC';
 		return Bdd::query($request, [$postId], true);
 	}
@@ -16,19 +27,24 @@ class Comment {
 		return Bdd::majBdd($request, [$postId, $content, $name]);
 	}
 
-	public function isNull($commentId) {
+	public function moderationIsNull($commentId) {
 		$request = 'SELECT moderation FROM comment WHERE id = ?';
 		return Bdd::query($request, [$commentId]);
 	}
 
 	public function reportComment($commentId) {
-		$request = 'UPDATE comment SET moderation = 1 WHERE id = ?';
+		$request = 'UPDATE comment SET moderation = 2 WHERE id = ?';
 		return Bdd::majBdd($request, [$commentId]);
 	}
 
 	public function suppComment($postId) {
 		$request = 'DELETE FROM comment WHERE billet_id = ?';
 		return Bdd::majBdd($request, [$postId]);
+	}
+
+	public function validComment($commentId) {
+		$request = 'UPDATE comment SET moderation = 3 WHERE id = ?';
+		return Bdd::majBdd($request, [$commentId]);
 	}
 
 }

@@ -20,7 +20,12 @@ if (isset($_GET['suppPost'])) {
 }
 
 if (isset($_POST['editPostContent'])) {
-    editPost($_POST['editPostTitle'], $_POST['editPostContent'], $_POST['editPostId']);
+    $_SESSION['alert'] = editPost($_POST['editPostTitle'], $_POST['editPostContent'], $_POST['editPostId'], $_POST['editPostStatut']);
+    header('location:index.php?p=Admin');
+}
+
+if (isset($_GET['validComment'])) {
+    $_SESSION['alert'] = validComment($_GET['id']);
     header('location:index.php?p=Admin');
 }
 

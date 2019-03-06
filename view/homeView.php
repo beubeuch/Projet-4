@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="starter-template col-md-8">
-		<h2>Derniers chapitre publié par Jean Forteroche</h2>
+		<h2>Derniers chapitres publiés par Jean Forteroche</h2>
 		<hr>
 		<div class="lead text-justify">
 			<?php

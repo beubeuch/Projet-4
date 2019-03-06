@@ -40,7 +40,12 @@ $navActive = isset($_GET['p']) ? $_GET['p'] : 'Accueil';
 		</div>
 	</nav>
 	<main role="main" class="container">
-		<?= $content; ?>
+		<?php
+		if (isset($_SESSION['alert'])) {
+			echo '<div class="alert alert-success text-center">'.$_SESSION['alert'].'</div>';
+		}
+		echo $content;
+		?>
 	</main><!-- /.container -->
 	<script src="public/js/script.js"></script>
 </body>

@@ -1,13 +1,27 @@
 <?php
 class Billet {
 	
-	public function getList() {
-		$request = 'SELECT * FROM billet ORDER BY id DESC';
+	public function getList($admin = false) {
+		if ($admin == true) {
+			$request = 'SELECT * FROM billet ORDER BY id DESC';
+		} else {
+			$request = 'SELECT * FROM billet WHERE statut = 2 ORDER BY id DESC';
+		}
+
 		return Bdd::query($request, null, true);
 	}
 
-	public function getLastChapters() {
-		$request = 'SELECT title, id, DATE_FORMAT(date, "%d/%m/%Y à %Hh") AS date FROM billet ORDER BY id DESC';
+	public function getAllChapters($admin = false) {
+		if ($admin == true) {
+			$request = '
+				SELECT billet.title, billet.id, DATE_FORMAT(billet.date, "%d/%m/%Y à %Hh%i") AS date, DATE_FORMAT(billet.date_modif, "%d/%m/%Y à %Hh%i") AS date_modif, billet_statut.name
+				FROM billet 
+				LEFT JOIN billet_statut 
+				ON billet.statut = billet_statut.id
+				ORDER BY billet.id DESC';
+		} else {
+			$request = 'SELECT title, id FROM billet WHERE statut = 2 ORDER BY id DESC';
+		}
 		return Bdd::query($request, null, true);
 	}
 
@@ -41,13 +55,15 @@ class Billet {
 		return Bdd::majBdd($request, [$postId]);
 	}
 
-	public function editBillet($title, $content, $postId) {
+	public function editBillet($title, $content, $postId, $statut) {
 		if ($postId == 0) {
 			$request = 'INSERT INTO billet(title, content, date) VALUES(?, ?, NOW())';
-			return Bdd::majBdd($request, [$title, $content]);
+			Bdd::majBdd($request, [$title, $content]);
+			return 'Billet créé avec succès';
 		} else {
-			$request = 'UPDATE billet SET title = ?, content = ? WHERE id = ?';
-			return Bdd::majBdd($request, [$title, $content, $postId]);
+			$request = 'UPDATE billet SET title = ?, content = ?, date_modif = NOW(), statut = ? WHERE id = ?';
+			Bdd::majBdd($request, [$title, $content, $statut, $postId]);
+			return 'Billet modifié avec succès';
 		}
 	}
 
