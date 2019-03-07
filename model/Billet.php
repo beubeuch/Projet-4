@@ -50,7 +50,7 @@ class Billet {
 
 	public function suppBillet($postId) {
 		$comment = new Comment();
-		$comment->suppComment($postId);
+		$comment->suppCommentFromPost($postId);
 		$request = 'DELETE FROM billet WHERE id = ?';
 		return Bdd::majBdd($request, [$postId]);
 	}
@@ -58,12 +58,10 @@ class Billet {
 	public function editBillet($title, $content, $postId, $statut) {
 		if ($postId == 0) {
 			$request = 'INSERT INTO billet(title, content, date) VALUES(?, ?, NOW())';
-			Bdd::majBdd($request, [$title, $content]);
-			return 'Billet créé avec succès';
+			return Bdd::majBdd($request, [$title, $content]);
 		} else {
 			$request = 'UPDATE billet SET title = ?, content = ?, date_modif = NOW(), statut = ? WHERE id = ?';
-			Bdd::majBdd($request, [$title, $content, $statut, $postId]);
-			return 'Billet modifié avec succès';
+			return Bdd::majBdd($request, [$title, $content, $statut, $postId]);
 		}
 	}
 

@@ -1,5 +1,6 @@
-.container {
+.container-fluid {
 	margin-top: 80px;
+	max-width: 1600px;
 }
 
 article .comments {
@@ -16,4 +17,31 @@ article .comments {
 .tox-tinymce {
 	width: 100%!important;
 	
+}
+
+.sticky-top {
+	top: 56px;
+	background: #fff;
+}
+
+div.list-group.sticky-top {
+	top: 65px;
+}
+
+th, td {
+	min-width: 89px;
+}
+
+.th-content {
+	width: 600px;
+}
+
+.alert#alertDiv {
+	top: 75px;
+	width: 45%;
+	margin: auto;
+}
+
+.btn {
+	min-width: 102px;
 }

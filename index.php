@@ -5,12 +5,12 @@ App::init();
 // Fonctionnement du site ---------------------------------------------------
 
 if (isset($_POST['newComment'])) {
-    $_SESSION['alert'] = newComment($_GET['id'], $_POST['newComment'], $_POST['name']);
+    newComment($_GET['id'], $_POST['newComment'], $_POST['name']);
     header('location:index.php?p=Billet&id='.$_GET['id']);
 }
 
 if (isset($_GET['report'])) {
-    $_SESSION['alert'] = reportComment($_GET['commentId']);
+    reportComment($_GET['commentId']);
     header('location:index.php?p=Billet&id='.$_GET['postId']);
 }
 
@@ -19,14 +19,28 @@ if (isset($_GET['suppPost'])) {
     header('location:index.php?p=Admin');
 }
 
-if (isset($_POST['editPostContent'])) {
-    $_SESSION['alert'] = editPost($_POST['editPostTitle'], $_POST['editPostContent'], $_POST['editPostId'], $_POST['editPostStatut']);
+if (isset($_GET['suppComment'])) {
+    suppComment($_GET['commentId']);
+    header('location:index.php?p=Admin');
+}
+
+if (isset($_GET['editContent'])) {
+    if (isset($_POST['editPostContent'])) {
+        editPost($_POST['editPostTitle'], $_POST['editPostContent'], $_POST['editPostId'], $_POST['editPostStatut']);
+    }
+    elseif (isset($_POST['editCommentContent'])) {
+        editComment($_POST['editCommentContent'], $_POST['editCommentId']);
+    }
     header('location:index.php?p=Admin');
 }
 
 if (isset($_GET['validComment'])) {
-    $_SESSION['alert'] = validComment($_GET['id']);
+    validComment($_GET['id']);
     header('location:index.php?p=Admin');
+}
+
+if (isset($_GET['removeAlert'])) {
+    unset($_SESSION['alert']);
 }
 
 // Affichage des pages ------------------------------------------------------

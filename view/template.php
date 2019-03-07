@@ -15,14 +15,14 @@ $navActive = isset($_GET['p']) ? $_GET['p'] : 'Accueil';
 	<link rel="stylesheet" type="text/css" href="public/css/styles.css">
 	<script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=jpl1upzthyr8idk4ytcv6rw78s1r5n2zahqo09mx82tk2sll"></script>
 </head>
-<body cz-shortcut-listen="true">
+<body>
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
 		<a class="navbar-brand" href="index.php">Jean Forteroche</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 
-		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+		<div class="collapse navbar-collapse">
 			<ul class="navbar-nav mr-auto">
 				<?php
 				foreach ($menuListe as $menu) {
@@ -39,14 +39,14 @@ $navActive = isset($_GET['p']) ? $_GET['p'] : 'Accueil';
 			</ul>
 		</div>
 	</nav>
-	<main role="main" class="container">
+	<main role="main" class="container-fluid">
 		<?php
-		if (isset($_SESSION['alert'])) {
-			echo '<div class="alert alert-success text-center">'.$_SESSION['alert'].'</div>';
-		}
+		echo Alert::visitorAlert();
 		echo $content;
 		?>
+		<a href="projet4.zip">Telecharger .zip</a>
 	</main><!-- /.container -->
+	<script src="public/js/ajax.js"></script>
 	<script src="public/js/script.js"></script>
 </body>
 </html>

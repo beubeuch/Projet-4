@@ -22,12 +22,17 @@ class Comment {
 		return Bdd::query($request, [$postId], true);
 	}
 
+	public function getSingleComments($commentId) {
+		$request = 'SELECT content FROM comment WHERE id = ? ORDER BY id DESC';
+		return Bdd::query($request, [$commentId]);
+	}
+
 	public function addComment($name, $content, $postId) {
 		$request = 'INSERT INTO comment(billet_id, content, name, date) VALUES(?, ?, ?, NOW())';
 		return Bdd::majBdd($request, [$postId, $content, $name]);
 	}
 
-	public function moderationIsNull($commentId) {
+	public function getModeration($commentId) {
 		$request = 'SELECT moderation FROM comment WHERE id = ?';
 		return Bdd::query($request, [$commentId]);
 	}
@@ -37,9 +42,19 @@ class Comment {
 		return Bdd::majBdd($request, [$commentId]);
 	}
 
-	public function suppComment($postId) {
+	public function editComment($content, $commentId) {
+		$request = 'UPDATE comment SET content = ? WHERE id = ?';
+		return Bdd::majBdd($request, [$content, $commentId]);
+	}
+
+	public function suppCommentFromPost($postId) {
 		$request = 'DELETE FROM comment WHERE billet_id = ?';
 		return Bdd::majBdd($request, [$postId]);
+	}
+
+	public function suppSingleComment($commentId) {
+		$request = 'DELETE FROM comment WHERE id = ?';
+		return Bdd::majBdd($request, [$commentId]);
 	}
 
 	public function validComment($commentId) {

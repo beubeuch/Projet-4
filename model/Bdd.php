@@ -58,12 +58,14 @@ class Bdd {
 	public static function majBdd($request, $data = null) {
 		$bdd = self::getBdd();
 		if ($data === null) {
-			$reponse = $bdd->exec($request);
+			$result = $bdd->exec($request);		// return nbr ligne affectées / 0 si aucune lignes affectées
+			return $result->rowCount();
+
 		} else {
 			$reponse = $bdd->prepare($request);
-			$reponse->execute($data);
+			$result = $reponse->execute($data);	// return TRUE or FALSE
+			return $reponse->rowCount();
 		}
-		return;
 	}
 
 }
