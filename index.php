@@ -40,7 +40,7 @@ if (isset($_GET['validComment'])) {
 }
 
 if (isset($_GET['removeAlert'])) {
-    unset($_SESSION['alert']);
+    Alert::unset();
 }
 
 // Affichage des pages ------------------------------------------------------
@@ -56,10 +56,19 @@ if(isset($_GET['p'])) {
             billetPage();
         }
         elseif ($_GET['p'] == 'Admin') {
-            // if (!isset($_SESSION['admin'])) {
-            //  header('location:index.php');
-            // }
-            if ($_GET['e'] == 'edit') {
+            if (!isset($_SESSION['admin'])) {
+                if (isset($_POST['adminLogin'])) {
+                    adminConnexion($_POST['adminLogin'], $_POST['adminPass']);
+                    header('location:index.php?p=Admin');
+                } else {
+                    adminLogin();
+                }
+            }
+            elseif (isset($_GET['disconnect'])) {
+                disconnectAdmin();
+                header('location:index.php');
+            }
+            elseif ($_GET['e'] == 'edit') {
                 editPage();
             }
             else {

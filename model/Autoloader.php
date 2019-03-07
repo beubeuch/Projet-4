@@ -7,7 +7,7 @@ class Autoloader{
 
 	static function autoload($class)
 	{
-		require 'model/'.$class.'.php';
+		require ROOT.'model/'.$class.'.php';
 	}
 
 }

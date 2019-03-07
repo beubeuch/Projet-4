@@ -16,10 +16,40 @@ function billetPage() {
 
 	$post = $billet->getBillet($postId);
 
+	if ($post->statut != 2) {
+		Alert::dangerAlert('Vous n\'avez pas l\'autorisation d\'afficher ce billet');
+		header('location:index.php');
+	}
+
 	$comment = new Comment();
 	$comments = $comment->getPostComments($postId);
 
 	require 'view/billetView.php';
+}
+
+function adminLogin() {
+	echo '<h2>Connexion à la zone administration</h2>';
+	echo Form::connexionForm();
+}
+
+function adminConnexion($login, $pass) {
+	$user = new User();
+	$admin = $user->getUser($login);
+	var_dump($admin);
+	if (!$admin) {
+		Alert::dangerAlert('Idantifiant ou mot de passe incorrect');
+	} else {
+		if ($user->verifyPassword($pass, $admin->pass)) {
+			Alert::successAlert('Vous vous êtes connecté avec succès');
+		} else {
+			Alert::dangerAlert('Idantifiant ou mot de passe incorrect');
+		}
+	}
+}
+
+function disconnectAdmin() {
+	unset($_SESSION['admin']);
+	Alert::successAlert('Vous êtes déconnecté de la zone administrateur');
 }
 
 function adminPage() {
@@ -55,7 +85,7 @@ function editPage() {
 		$com = $comment->getSingleComments($commentId);
 	}
 	else {
-		$_SESSION['alert']['danger'] = 'Une erreur est survenue, merci de réessayer';
+		Alert::failAlert();
 		header('location:index.php?p=Admin');
 	}
 	require 'view/editView.php';
@@ -65,7 +95,7 @@ function newComment($postId, $content, $name) {
 	unset($_SESSION['alert']);
 	$comment = new Comment();
 	$comment->addComment($name, $content, $postId);
-	$_SESSION['alert']['success'] = 'Commentaire ajouté avec succés';
+	Alert::successAlert('Commentaire ajouté avec succés');
 }
 
 function reportComment($commentId) {
@@ -74,13 +104,13 @@ function reportComment($commentId) {
 	$moderate = $comment->getModeration($commentId);
 	if ($moderate->moderation == 1) {
 		$comment->reportComment($commentId);
-		$_SESSION['alert']['success'] = 'Le commentaire à été signalé';
+		Alert::successAlert('Le commentaire à été signalé');
 	}
 	elseif ($moderate->moderation == 2) {
-		$_SESSION['alert']['warning'] = 'Le commentaire à déjà été signalé';
+		Alert::warningAlert('Le commentaire à déjà été signalé');
 	}
 	elseif ($moderate->moderation == 3) {
-		$_SESSION['alert']['danger'] = 'Le commentaire à déjà été modéré, merci de contacter un administrateur';
+		Alert::dangerAlert('Le commentaire à déjà été modéré, merci de contacter un administrateur');
 	} else {
 		// throw new exception
 	}
@@ -94,16 +124,16 @@ function suppPost($postId) {
 function suppComment($commentId) {
 	$comment = new Comment();
 	$comment->suppSingleComment($commentId);
-	$_SESSION['alert']['success'] = 'Le commentaire à été supprimé avec succès';
+	Alert::successAlert('Le commentaire à été supprimé avec succès');
 }
 
 function editPost($title, $content, $postId, $statut) {
 	$post = new Billet();
 	$result = $post->editBillet($title, $content, $postId, $statut);
 	if ($result > 0) {
-	 	$_SESSION['alert']['success'] = 'Le billet a été modifié avec succès';
+	 	Alert::successAlert('Le billet a été modifié avec succès');
 	} else {
-		$_SESSION['alert']['danger'] = 'Une erreur est survenue, merci de rééssayer';
+		Alert::failAlert();
 	}
 }
 
@@ -111,9 +141,9 @@ function editComment($content, $commentId) {
 	$comment = new Comment();
 	$result = $comment->editComment($content, $commentId);
 	if ($result > 0) {
-	 	$_SESSION['alert']['success'] = 'Le commentaire a été modifié avec succès';
+	 	Alert::successAlert('Le commentaire a été modifié avec succès');
 	} else {
-		$_SESSION['alert']['danger'] = 'Une erreur est survenue, merci de rééssayer';
+		Alert::failAlert();
 	}
 }
 
@@ -122,10 +152,10 @@ function validComment($commentId) {
 	$moderate = $comment->getModeration($commentId);
 	if ($moderate->moderation == 1 || $moderate->moderation == 2) {
 		$comment->reportComment($commentId);
-		$_SESSION['alert']['success'] = 'Le commentaire à correctement été validé';
+		Alert::successAlert('Le commentaire à correctement été validé');
 	}
 	elseif ($moderate->moderation == 3) {
-		$_SESSION['alert']['warning'] = 'Le commentaire est déjà modéré';
+		Alert::warningAlert('Le commentaire est déjà modéré');
 	} else {
 		// throw new exception
 	}

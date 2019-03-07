@@ -9,14 +9,14 @@ class App {
 		'BDD_MDP' => 'KJ31rxKp5y0D8B0l'];
 
 	public static function init() {
-		// define(ROOT, str_replace('volume1/web/', '', dirname(__DIR__)).'/');
+		define(ROOT, $_SERVER['DOCUMENT_ROOT'].'/openclassroom/projet4/');
 		session_start();
 		require 'controller/frontend.php';
 		self::runAutoloader();
 	}
 
 	public static function runAutoloader() {
-		require 'model'. DIRECTORY_SEPARATOR .'Autoloader.php';
+		require ROOT.'model'. DIRECTORY_SEPARATOR .'Autoloader.php';
 		Autoloader::register();
 	}
 }

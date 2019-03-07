@@ -35,6 +35,11 @@ $navActive = isset($_GET['p']) ? $_GET['p'] : 'Accueil';
 						<a class="nav-link" href="index.php?p=<?= $menu ?>"><?= $menu ?></a>
 					</li>
 					<?php
+				}
+				if (isset($_SESSION['admin'])) { ?>
+					<li class="nav-item<?= $classActive ?>">
+						<a class="nav-link text-danger" href="index.php?p=Admin&disconnect">Se déconnecter</a>
+					</li> <?php
 				} ?>
 			</ul>
 		</div>
@@ -46,6 +51,24 @@ $navActive = isset($_GET['p']) ? $_GET['p'] : 'Accueil';
 		?>
 		<a href="projet4.zip">Telecharger .zip</a>
 	</main><!-- /.container -->
+	<footer class="row">
+		<div class="col-md-4">
+			<h4>$_SERVER</h4>
+			<?php
+			echo '<pre>';
+			print_r($_SERVER);
+			echo '</pre>';
+			?>
+		</div>
+		<div class="col-md-4">
+			<h4>$_SESSION</h4>
+			<?php
+			echo '<pre>';
+			print_r($_SESSION);
+			echo '</pre>';
+			?>
+		</div>
+	</footer>
 	<script src="public/js/ajax.js"></script>
 	<script src="public/js/script.js"></script>
 </body>

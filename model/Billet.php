@@ -39,7 +39,7 @@ class Billet {
 	}
 
 	public function getLastBillet() {
-		$request = 'SELECT * FROM billet ORDER BY id DESC';
+		$request = 'SELECT * FROM billet WHERE statut = 2 ORDER BY id DESC';
 		return Bdd::query($request);
 	}
 
