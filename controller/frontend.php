@@ -29,7 +29,7 @@ function billetPage() {
 
 function adminLogin() {
 	echo '<h2>Connexion à la zone administration</h2>';
-	echo Form::connexionForm();
+	echo FormBuilder::connexionForm();
 }
 
 function adminConnexion($login, $pass) {
@@ -86,7 +86,7 @@ function editPage() {
 	}
 	else {
 		Alert::failAlert();
-		header('location:index.php?p=Admin');
+		header('location:index.php?p=admin');
 	}
 	require 'view/editView.php';
 }

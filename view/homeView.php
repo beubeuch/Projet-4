@@ -19,7 +19,7 @@
 		<div class="list-group">
 			<?php
 			foreach ($chapterList as $chapter) {
-				echo '<a href="'.ROOT.'/index.php?p=Billet&id='. $chapter->id .'" class="list-group-item list-group-item-action">'. $chapter->title .'</a>';
+				echo '<a href="index.php?p=billet&id='. $chapter->id .'" class="list-group-item list-group-item-action">'. $chapter->title .'</a>';
 			} ?>
 		</div>
 	</div>

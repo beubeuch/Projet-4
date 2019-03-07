@@ -18,10 +18,6 @@ $navActive = isset($_GET['p']) ? $_GET['p'] : 'Accueil';
 <body>
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
 		<a class="navbar-brand" href="index.php">Jean Forteroche</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-
 		<div class="collapse navbar-collapse">
 			<ul class="navbar-nav mr-auto">
 				<?php
@@ -32,13 +28,13 @@ $navActive = isset($_GET['p']) ? $_GET['p'] : 'Accueil';
 						$classActive = '';
 					} ?>
 					<li class="nav-item<?= $classActive ?>">
-						<a class="nav-link" href="index.php?p=<?= $menu ?>"><?= $menu ?></a>
+						<a class="nav-link" href="index.php?p=<?= $menu ?>"><?= ucfirst($menu);?></a>
 					</li>
 					<?php
 				}
 				if (isset($_SESSION['admin'])) { ?>
 					<li class="nav-item<?= $classActive ?>">
-						<a class="nav-link text-danger" href="index.php?p=Admin&disconnect">Se déconnecter</a>
+						<a class="nav-link text-danger" href="index.php?p=admin&disconnect">Se déconnecter</a>
 					</li> <?php
 				} ?>
 			</ul>

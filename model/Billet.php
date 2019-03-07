@@ -33,7 +33,7 @@ class Billet {
 		$comment = new Comment();
 		$nbrComment = $comment->getNbrComments($id);
 		return 	'<div class="row">
-					<p class="col-md-6"><a href="index.php?p=Billet&id='. $id .'">Lire la suite</a></p>
+					<p class="col-md-6"><a href="index.php?p=billet&id='. $id .'">Lire la suite</a></p>
 					<p class="col-md-6 text-right comments">'. $nbrComment->nbr_comment .' commentaires</p>
 				</div>';
 	}
@@ -63,6 +63,11 @@ class Billet {
 			$request = 'UPDATE billet SET title = ?, content = ?, date_modif = NOW(), statut = ? WHERE id = ?';
 			return Bdd::majBdd($request, [$title, $content, $statut, $postId]);
 		}
+	}
+
+	public function getStatutList() {
+		$request = 'SELECT * FROM billet_statut';
+		return Bdd::query($request, null, true);
 	}
 
 }
