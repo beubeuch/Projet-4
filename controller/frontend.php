@@ -1,60 +1,42 @@
 <?php
 
 function homePage() {
-	$billet = new Billet();
-	$chapterList = $billet->getAllChapters();
+	$titlePage = 'Billet simple pour l\'Alaska';
+	$post = new Post();
+	$contentList = $post->getList();
+	$chapterList = $post->getAllPost();
 	require 'view/homeView.php';
 }
 
-function billetPage() {
-	$billet = new Billet();
-	if (isset($_GET['id'])) {
-		$postId = $_GET['id'];
+function postPage() {
+	$post = new Post();
+	if (isset($_GET['postId'])) {
+		$postId = $_GET['postId'];
 	} else {
-		$postId = $billet->getLastBillet()->id;
+		$postId = $post->getLastPost()->id;
 	}
 
-	$post = $billet->getBillet($postId);
+	$chapitre = $post->getPost($postId);
 
-	if ($post->statut != 2) {
-		Alert::dangerAlert('Vous n\'avez pas l\'autorisation d\'afficher ce billet');
+	if ($chapitre->statut != 2) {
+		Alert::dangerAlert('Vous n\'avez pas l\'autorisation d\'afficher ce chapitre');
 		header('location:index.php');
 	}
 
 	$comment = new Comment();
 	$comments = $comment->getPostComments($postId);
 
-	require 'view/billetView.php';
+	require 'view/postView.php';
 }
 
-function adminLogin() {
+function adminLoginPage() {
 	echo '<h2>Connexion à la zone administration</h2>';
 	echo FormBuilder::connexionForm();
 }
 
-function adminConnexion($login, $pass) {
-	$user = new User();
-	$admin = $user->getUser($login);
-	var_dump($admin);
-	if (!$admin) {
-		Alert::dangerAlert('Idantifiant ou mot de passe incorrect');
-	} else {
-		if ($user->verifyPassword($pass, $admin->pass)) {
-			Alert::successAlert('Vous vous êtes connecté avec succès');
-		} else {
-			Alert::dangerAlert('Idantifiant ou mot de passe incorrect');
-		}
-	}
-}
-
-function disconnectAdmin() {
-	unset($_SESSION['admin']);
-	Alert::successAlert('Vous êtes déconnecté de la zone administrateur');
-}
-
 function adminPage() {
-	$billet = new Billet();
-	$billetList = $billet->getAllChapters(true);
+	$post = new Post();
+	$postList = $post->getAllPost(true);
 	$comment = new Comment();
 	$commentList = $comment->getAllComments();
 
@@ -75,9 +57,15 @@ function adminPage() {
 
 function editPage() {
 	if (isset($_GET['postId'])) {
-		$billet = new Billet();
+		$billet = new Post();
 		$postId = $_GET['postId'];
-		$post = $billet->getBillet($postId);
+		$post = $billet->getPost($postId);
+		if ($postId > 0) {
+			$select = $post->statut;
+		}
+		else {
+			$select = null;
+		}
 	}
 	elseif (isset($_GET['commentId']) && $_GET['commentId'] > 0) {
 		$comment = new Comment();
@@ -91,11 +79,37 @@ function editPage() {
 	require 'view/editView.php';
 }
 
+function adminConnexion($login, $pass) {
+	$user = new User();
+	$admin = $user->getUser($login);
+	var_dump($admin);
+	if (!$admin) {
+		Alert::dangerAlert('Idantifiant ou mot de passe incorrect');
+	} else {
+		if ($user->verifyPassword($pass, $admin->pass, $admin->statut)) {
+			Alert::successAlert('Vous vous êtes connecté avec succès');
+		} else {
+			Alert::dangerAlert('Idantifiant ou mot de passe incorrect');
+		}
+	}
+}
+
+function disconnectAdmin() {
+	unset($_SESSION['admin']);
+	Alert::successAlert('Vous êtes déconnecté de la zone administrateur');
+}
+
 function newComment($postId, $content, $name) {
 	unset($_SESSION['alert']);
 	$comment = new Comment();
-	$comment->addComment($name, $content, $postId);
-	Alert::successAlert('Commentaire ajouté avec succés');
+	$result = $comment->addComment($name, $content, $postId);
+	if ($result > 0) {
+		Alert::successAlert('Commentaire ajouté avec succès');
+	}
+	else {
+		Alert::failAlert();
+		header('location:index.php?p=admin');
+	}
 }
 
 function reportComment($commentId) {
@@ -111,29 +125,46 @@ function reportComment($commentId) {
 	}
 	elseif ($moderate->moderation == 3) {
 		Alert::dangerAlert('Le commentaire à déjà été modéré, merci de contacter un administrateur');
-	} else {
-		// throw new exception
+	}
+	else {
+		Alert::failAlert();
+		header('location:index.php');
 	}
 }
 
 function suppPost($postId) {
-	$post = new Billet();
-	return $post->suppBillet($postId);
+	$post = new Post();
+	$result = $post->suppPost($postId);
+	if ($result > 0) {
+		Alert::successAlert('Le Chapitre a été supprimé avec succès');
+	}
+	else {
+		Alert::failAlert();
+		header('location:index.php?p=admin');
+	}
 }
 
 function suppComment($commentId) {
 	$comment = new Comment();
-	$comment->suppSingleComment($commentId);
-	Alert::successAlert('Le commentaire à été supprimé avec succès');
+	$result = $comment->suppSingleComment($commentId);
+	if ($result > 0) {
+		Alert::successAlert('Le commentaire à été supprimé avec succès');
+	}
+	else {
+		Alert::failAlert();
+		header('location:index.php?p=admin');
+	}
 }
 
 function editPost($title, $content, $postId, $statut) {
-	$post = new Billet();
-	$result = $post->editBillet($title, $content, $postId, $statut);
+	$post = new Post();
+	$result = $post->editPost($title, $content, $postId, $statut);
 	if ($result > 0) {
-	 	Alert::successAlert('Le billet a été modifié avec succès');
-	} else {
+	 	Alert::successAlert('Le chapitre a été modifié avec succès');
+	}
+	else {
 		Alert::failAlert();
+		header('location:index.php?p=admin');
 	}
 }
 
@@ -142,8 +173,10 @@ function editComment($content, $commentId) {
 	$result = $comment->editComment($content, $commentId);
 	if ($result > 0) {
 	 	Alert::successAlert('Le commentaire a été modifié avec succès');
-	} else {
+	}
+	else {
 		Alert::failAlert();
+		header('location:index.php?p=admin');
 	}
 }
 
@@ -156,8 +189,10 @@ function validComment($commentId) {
 	}
 	elseif ($moderate->moderation == 3) {
 		Alert::warningAlert('Le commentaire est déjà modéré');
-	} else {
-		// throw new exception
+	}
+	else {
+		Alert::failAlert();
+		header('location:index.php?p=admin');
 	}
 
 	return $comment->validComment($commentId);

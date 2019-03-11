@@ -2,15 +2,15 @@
 class Comment {
 
 	public function getNbrComments($postId) {
-		$request = 'SELECT COUNT(*) AS nbr_comment FROM comment WHERE billet_id = ? ORDER BY id DESC';
+		$request = 'SELECT COUNT(*) AS nbr_comment FROM comment WHERE post_id = ? ORDER BY id DESC';
 		return Bdd::query($request, [$postId]);
 	}
 
 	public function getAllComments() {
-		$request = 'SELECT comment.id, comment.name, comment.content, billet.title, comment_moderate.moderation_name, comment.moderation, DATE_FORMAT(comment.date, "%d/%m/%Y à %Hh") AS date
+		$request = 'SELECT comment.id, comment.name, comment.content, post.title, comment_moderate.moderation_name, comment.moderation, DATE_FORMAT(comment.date, "%d/%m/%Y à %Hh") AS date
 					FROM comment
-					LEFT JOIN billet
-					ON comment.billet_id = billet.id
+					LEFT JOIN post
+					ON comment.post_id = post.id
 					LEFT JOIN comment_moderate
 					ON comment.moderation = comment_moderate.id
 					ORDER BY comment.id DESC';
@@ -18,7 +18,7 @@ class Comment {
 	}
 
 	public function getPostComments($postId) {
-		$request = 'SELECT id, name, content, DATE_FORMAT(date, "%d/%m/%Y à %Hh") AS date FROM comment WHERE billet_id = ? ORDER BY id DESC';
+		$request = 'SELECT id, name, content, DATE_FORMAT(date, "%d/%m/%Y à %Hh") AS date FROM comment WHERE post_id = ? ORDER BY id DESC';
 		return Bdd::query($request, [$postId], true);
 	}
 
@@ -28,7 +28,7 @@ class Comment {
 	}
 
 	public function addComment($name, $content, $postId) {
-		$request = 'INSERT INTO comment(billet_id, content, name, date) VALUES(?, ?, ?, NOW())';
+		$request = 'INSERT INTO comment(post_id, content, name, date) VALUES(?, ?, ?, NOW())';
 		return Bdd::majBdd($request, [$postId, $content, $name]);
 	}
 
@@ -48,7 +48,7 @@ class Comment {
 	}
 
 	public function suppCommentFromPost($postId) {
-		$request = 'DELETE FROM comment WHERE billet_id = ?';
+		$request = 'DELETE FROM comment WHERE post_id = ?';
 		return Bdd::majBdd($request, [$postId]);
 	}
 
