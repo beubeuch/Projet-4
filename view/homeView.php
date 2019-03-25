@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="starter-template col-md-8 col-lg-10">
-		<h2>Derniers chapitres publiés par Jean Forteroche</h2>
+		<h2>Derniers chapitres</h2>
 		<hr>
 		<div class="text-justify">
 			<?php
@@ -14,7 +14,7 @@
 		</div>
 	</div>
 	<div class="col-md-4 col-lg-2 text-right d-sm-none d-md-block">
-		<h2>Derniers chapitres</h2>
+		<h2>Liens rapides</h2>
 		<hr>
 		<div class="list-group">
 			<?php

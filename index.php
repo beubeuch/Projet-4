@@ -1,17 +1,20 @@
 <?php
-require 'model/core/App.php';
+use \model\core\App;
+use \model\Alert;
+
+require_once 'model/core/App.php';
 App::init();
 
 // Fonctionnement du site ---------------------------------------------------
 
 if (isset($_POST['newComment'])) {
     newComment($_GET['postId'], $_POST['newComment'], $_POST['name']);
-    header('location:index.php?p=chapitre&id='.$_GET['id']);
+    header('location:index.php?p=chapitre&postId='.$_GET['id']);
 }
 
 if (isset($_GET['report'])) {
     reportComment($_GET['commentId']);
-    header('location:index.php?p=chapitre&id='.$_GET['postId']);
+    header('location:index.php?p=chapitre&postId='.$_GET['postId']);
 }
 
 if (isset($_GET['suppPost'])) {

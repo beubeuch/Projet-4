@@ -1,4 +1,9 @@
 <?php
+use \model\Post;
+use \model\Comment;
+use \model\User;
+use \model\Alert;
+use \model\FormBuilder;
 
 function homePage() {
 	$titlePage = 'Billet simple pour l\'Alaska';
@@ -20,6 +25,10 @@ function postPage() {
 
 	if ($chapitre->statut != 2) {
 		Alert::dangerAlert('Vous n\'avez pas l\'autorisation d\'afficher ce chapitre');
+		header('location:index.php');
+	}
+	if ($chapitre == false) {
+		Alert::dangerAlert('Désolé, ce chapitre n\'existe pas');
 		header('location:index.php');
 	}
 

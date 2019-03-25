@@ -1,5 +1,5 @@
 <?php
-$menuListe = App::$menus;
+$menuListe = model\core\App::$menus;
 $navActive = isset($_GET['p']) ? $_GET['p'] : 'Accueil';
 ?>
 
@@ -44,9 +44,21 @@ $navActive = isset($_GET['p']) ? $_GET['p'] : 'Accueil';
 		</div>
 	</nav>
 
-	<main role="main" class="container-fluid">
+	<?php
+	if (!isset($_GET['p']) || $_GET['p'] == 'accueil') {
+		echo '	<div class="home-body">
+					<h1 class="text-center text-white">Billet simple pour l\'Alaska</h1>
+					<div class="author-img">
+						<img src="public/images/photo_profil.jpg" alt="Photo de Jean Forteroche">
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae labore, exercitationem voluptas sequi repellat voluptatum sit? Rem repudiandae similique dolores sunt ducimus eligendi, obcaecati voluptate, ipsam excepturi veniam modi sint?</p>
+					</div>
+					<a href="#chaps" class="btn btn-primary">Commencer la lecture</a>
+				</div>';
+	} ?>
+	
+	<main role="main" class="container-fluid" id="chaps">
 		<?php
-		echo Alert::visitorAlert();
+		echo model\Alert::visitorAlert();
 		echo $content;
 		?>
 		<a href="projet4.zip">Telecharger .zip</a>

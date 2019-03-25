@@ -1,4 +1,8 @@
 <?php
+namespace model;
+
+use model\core\Bdd;
+
 class Comment {
 
 	public function getNbrComments($postId) {
@@ -18,7 +22,7 @@ class Comment {
 	}
 
 	public function getPostComments($postId) {
-		$request = 'SELECT id, name, content, DATE_FORMAT(date, "%d/%m/%Y à %Hh") AS date FROM comment WHERE post_id = ? ORDER BY id DESC';
+		$request = 'SELECT id, name, content, moderation, DATE_FORMAT(date, "%d/%m/%Y à %Hh") AS date FROM comment WHERE post_id = ? ORDER BY id DESC';
 		return Bdd::query($request, [$postId], true);
 	}
 
