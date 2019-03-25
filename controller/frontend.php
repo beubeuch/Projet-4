@@ -22,6 +22,11 @@ function postPage() {
 	}
 
 	$chapitre = $post->getPost($postId);
+	if ($chapitre->img != null) {
+		$imgUrl = $chapitre->img;
+	} else {
+		$imgUrl = 'photo-1531884422565-1b4a26326a31.jpg';
+	}
 
 	if ($chapitre->statut != 2) {
 		Alert::dangerAlert('Vous n\'avez pas l\'autorisation d\'afficher ce chapitre');
@@ -65,7 +70,7 @@ function adminPage() {
 }
 
 function editPage() {
-	if (isset($_GET['postId'])) {
+	if (isset($_GET['postId']) && !isset($_SESSION['edit'])) {
 		$billet = new Post();
 		$postId = $_GET['postId'];
 		$post = $billet->getPost($postId);
@@ -75,6 +80,15 @@ function editPage() {
 		else {
 			$select = null;
 		}
+	}
+	elseif (isset($_SESSION['edit'])) {
+		class SimulPost{}
+		$post = new SimulPost();
+		$postId = $_SESSION['edit']['postId'];
+		$select = $_SESSION['edit']['select'];
+		$post->title = $_SESSION['edit']['title'];
+		$post->content = $_SESSION['edit']['content'];
+		$post->img = $_SESSION['edit']['img'];
 	}
 	elseif (isset($_GET['commentId']) && $_GET['commentId'] > 0) {
 		$comment = new Comment();
@@ -165,9 +179,30 @@ function suppComment($commentId) {
 	}
 }
 
-function editPost($title, $content, $postId, $statut) {
+function editPost($title, $content, $postId, $statut, $img, $oldImgName) {
 	$post = new Post();
-	$result = $post->editPost($title, $content, $postId, $statut);
+
+	if (isset($_SESSION['edit'])) {
+		unset($_SESSION['edit']);
+	}
+
+	if ($img != null && $img['error'] == 0) {
+		$imgClass = new model\core\ImgApp();
+		$imgName = $imgClass->uploadImg($img);
+		if ($imgName == false) {
+			$_SESSION['edit']['postId'] = $postId;
+			$_SESSION['edit']['title'] = $title;
+			$_SESSION['edit']['content'] = $content;
+			$_SESSION['edit']['select'] = $statut;
+			$_SESSION['edit']['img'] = $oldImgName;
+			header('location:index.php?p=admin&e=edit');
+		} else {
+			$result = $post->editPost($title, $content, $postId, $statut, $imgName);
+		}
+	} else {
+		$result = $post->editPost($title, $content, $postId, $statut);
+	}
+
 	if ($result > 0) {
 	 	Alert::successAlert('Le chapitre a été modifié avec succès');
 	}

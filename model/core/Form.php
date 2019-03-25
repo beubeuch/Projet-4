@@ -47,6 +47,13 @@ class Form {
 		return $select;		
 	}
 
+	protected static function upload($label, $name) {
+		return 	'<p class="row">
+					<label class="col-md-3">'. $label .'</label>
+					<input type="file" name="'. $name .'" class="col-md-9">
+				</p>';
+	}
+
 	protected static function submit($value) {
 		return 	'<p class="row">
 					<input type="submit" value="'. $value .'" class="btn btn-primary">

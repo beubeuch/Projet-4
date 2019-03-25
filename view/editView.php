@@ -10,7 +10,7 @@ use \model\FormBuilder;
 	<div class="col-md-12">
 		<?php
 		if (isset($post)) {
-			echo FormBuilder::editPostForm('index.php?editContent', $post->title, $post->content, $postId, $select);
+			echo FormBuilder::editPostForm('index.php?editContent', $post->title, $post->content, $postId, $post->img, $select);
 		}
 		elseif (isset($com)) {
 			echo FormBuilder::editCommentForm('index.php?editContent', $com->content, $commentId);

@@ -9,6 +9,7 @@ class App {
 		define(ROOT, $_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR.'openclassroom'. DIRECTORY_SEPARATOR .'projet4'. DIRECTORY_SEPARATOR);
 		session_start();
 		require 'controller/frontend.php';
+
 		self::runAutoloader();
 	}
 

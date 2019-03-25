@@ -29,7 +29,7 @@ if (isset($_GET['suppComment'])) {
 
 if (isset($_GET['editContent'])) {
     if (isset($_POST['editPostContent'])) {
-        editPost($_POST['editPostTitle'], $_POST['editPostContent'], $_POST['editPostId'], $_POST['editPostStatut']);
+        editPost($_POST['editPostTitle'], $_POST['editPostContent'], $_POST['editPostId'], $_POST['editPostStatut'], $_FILES['editPostImg'], $_POST['editPostImgName']);
     }
     elseif (isset($_POST['editCommentContent'])) {
         editComment($_POST['editCommentContent'], $_POST['editCommentId']);
@@ -93,7 +93,11 @@ $content = ob_get_clean();
 // Titre du site ------------------------------------------------------------
 
 if ($_GET['p'] == 'chapitre') {
-    $titlePage = 'Chapitre';
+    if (isset($_GET['postId'])) {
+        $titlePage = 'Chapitre '.$_GET['postId'];
+    } else {
+        $titlePage = 'Dernier Chapitre';
+    }
 }
 elseif ($_GET['p'] == 'admin' && !isset($_GET['e'])) {
     $titlePage = 'Zone Administrateur';

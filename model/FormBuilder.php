@@ -14,13 +14,28 @@ class FormBuilder extends core\Form {
 		return $form;
 	}
 
-	public static function editPostForm($action, $titleContent, $bodyContent, $postId, $select = null) {
+	public static function editPostForm($action, $titleContent, $bodyContent, $postId, $img, $select = null) {
 		$post = new Post();
 		$statutList = $post->getStatutList();
 
-		$form = '<form method="post" action="'. $action .'">';
+		if ($img != null) {
+			$imgName = 'public/images/'.$img;
+		} else {
+			$imgName = '';
+		}
+
+		$form = '<form method="post" action="'. $action .'" enctype="multipart/form-data">';
 		$form .= self::text('Titre', 'editPostTitle', $titleContent);
 		$form .= self::list('Statut', 'editPostStatut', $statutList, $select);
+
+		$form .= '<div class="edit-img">';
+		$form .= 	self::upload('Image', 'editPostImg');
+		$form .= 	'<div class="img-div">';
+		$form .= 		'<img src="'.$imgName.'">';
+		$form .= 		self::hidden('editPostImgName', $img);
+		$form .= 	'</div>';
+		$form .= '</div>';
+
 		$form .= self::textArea('', 'editPostContent', $bodyContent, true);
 		$form .= self::hidden('editPostId', $postId);
 		$form .= self::submit('Valider');

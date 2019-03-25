@@ -60,13 +60,23 @@ class Post {
 		return Bdd::majBdd($request, [$postId]);
 	}
 
-	public function editPost($title, $content, $postId, $statut) {
+	public function editPost($title, $content, $postId, $statut, $img = null) {
 		if ($postId == 0) {
-			$request = 'INSERT INTO post(title, content, date) VALUES(?, ?, NOW())';
-			return Bdd::majBdd($request, [$title, $content]);
+			if ($img != null) {
+				$request = 'INSERT INTO post(title, content, img, date) VALUES(?, ?, ?, NOW())';
+				return Bdd::majBdd($request, [$title, $content, $img]);
+			} else {
+				$request = 'INSERT INTO post(title, content, date) VALUES(?, ?, NOW())';
+				return Bdd::majBdd($request, [$title, $content]);
+			}
 		} else {
-			$request = 'UPDATE post SET title = ?, content = ?, date_modif = NOW(), statut = ? WHERE id = ?';
-			return Bdd::majBdd($request, [$title, $content, $statut, $postId]);
+			if ($img != null) {
+				$request = 'UPDATE post SET title = ?, content = ?, date_modif = NOW(), statut = ?, img = ? WHERE id = ?';
+				return Bdd::majBdd($request, [$title, $content, $statut, $img, $postId]);
+			} else {
+				$request = 'UPDATE post SET title = ?, content = ?, date_modif = NOW(), statut = ? WHERE id = ?';
+				return Bdd::majBdd($request, [$title, $content, $statut, $postId]);
+			}
 		}
 	}
 
