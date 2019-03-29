@@ -1,42 +1,38 @@
 .home-body {
-	width: 100%;
-	height: calc(85vh - 56px);
-	margin-top: 56px;
+	max-width: 100% !important;
+	min-height: calc(85vh - 56px);
+	margin-top: 56px !important;
 	padding-top: 20px;
 	background: url('../images/home.jpg') center no-repeat fixed;
-	background-size: 100%;
+	background-size: cover;
 	position: relative;
 }
 	.home-body h1 {
 		text-transform: uppercase;
+		font-family: 'Montserrat';
 	}
-	.home-body .author-img {
-		position: absolute;
+	.home-body .author-div {
+		/*position: absolute;*/
 		background: rgba(0,0,0,0.6);
 		width: 800px;
-		height: 240px;
-		top: 100px;
-		left: calc(50% - 400px);
+		height: auto;
+		/*top: 100px;
+		left: calc(50% - 400px);*/
 		padding: 20px;
 		border-radius: 4px;
 		box-shadow: 2px 2px 5px rgba(0,0,0,0.6);
 		color: #fff;
 	}
-		.home-body .author-img img {
-			width: 200px;
-			float: left;
+		.home-body .author-div img {
+			max-width: 100%;
+			max-height: 100%;
 			border-radius: 4px;
-		}
-		.home-body .author-img p {
-			margin-left: 220px;
 		}
 
 	.home-body a {
 		width: 300px;
-		position: absolute;
-		top: 370px;
-		left: calc(50% - 150px);
 	}
+
 
 .container-fluid {
 	margin-top: 80px;
@@ -110,3 +106,7 @@ th, td {
 			max-width: 100%;
 			max-height: 100%;
 		}
+
+textarea {
+	height: 90px;
+}

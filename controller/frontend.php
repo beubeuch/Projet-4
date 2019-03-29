@@ -22,7 +22,7 @@ function postPage() {
 	}
 
 	$chapitre = $post->getPost($postId);
-	if ($chapitre->img != null) {
+	if ($chapitre->img != null && file_exists('public/images/'.$chapitre->img)) {
 		$imgUrl = $chapitre->img;
 	} else {
 		$imgUrl = 'photo-1531884422565-1b4a26326a31.jpg';
@@ -41,6 +41,10 @@ function postPage() {
 	$comments = $comment->getPostComments($postId);
 
 	require 'view/postView.php';
+}
+
+function contactPage() {
+	require 'view/contactView.php';
 }
 
 function adminLoginPage() {
@@ -70,7 +74,16 @@ function adminPage() {
 }
 
 function editPage() {
-	if (isset($_GET['postId']) && !isset($_SESSION['edit'])) {
+	if (!isset($_GET['postId']) && !isset($_GET['commentId']) && isset($_SESSION['edit'])) {
+		class SimulPost{}
+		$post = new SimulPost();
+		$postId = $_SESSION['edit']['postId'];
+		$select = $_SESSION['edit']['select'];
+		$post->title = $_SESSION['edit']['title'];
+		$post->content = $_SESSION['edit']['content'];
+		$post->img = $_SESSION['edit']['img'];
+	}
+	elseif (isset($_GET['postId']) && $_GET['postId'] > 0) {
 		$billet = new Post();
 		$postId = $_GET['postId'];
 		$post = $billet->getPost($postId);
@@ -80,15 +93,6 @@ function editPage() {
 		else {
 			$select = null;
 		}
-	}
-	elseif (isset($_SESSION['edit'])) {
-		class SimulPost{}
-		$post = new SimulPost();
-		$postId = $_SESSION['edit']['postId'];
-		$select = $_SESSION['edit']['select'];
-		$post->title = $_SESSION['edit']['title'];
-		$post->content = $_SESSION['edit']['content'];
-		$post->img = $_SESSION['edit']['img'];
 	}
 	elseif (isset($_GET['commentId']) && $_GET['commentId'] > 0) {
 		$comment = new Comment();
@@ -100,144 +104,4 @@ function editPage() {
 		header('location:index.php?p=admin');
 	}
 	require 'view/editView.php';
-}
-
-function adminConnexion($login, $pass) {
-	$user = new User();
-	$admin = $user->getUser($login);
-	var_dump($admin);
-	if (!$admin) {
-		Alert::dangerAlert('Idantifiant ou mot de passe incorrect');
-	} else {
-		if ($user->verifyPassword($pass, $admin->pass, $admin->statut)) {
-			Alert::successAlert('Vous vous êtes connecté avec succès');
-		} else {
-			Alert::dangerAlert('Idantifiant ou mot de passe incorrect');
-		}
-	}
-}
-
-function disconnectAdmin() {
-	unset($_SESSION['admin']);
-	Alert::successAlert('Vous êtes déconnecté de la zone administrateur');
-}
-
-function newComment($postId, $content, $name) {
-	unset($_SESSION['alert']);
-	$comment = new Comment();
-	$result = $comment->addComment($name, $content, $postId);
-	if ($result > 0) {
-		Alert::successAlert('Commentaire ajouté avec succès');
-	}
-	else {
-		Alert::failAlert();
-		header('location:index.php?p=admin');
-	}
-}
-
-function reportComment($commentId) {
-	unset($_SESSION['alert']);
-	$comment = new Comment();
-	$moderate = $comment->getModeration($commentId);
-	if ($moderate->moderation == 1) {
-		$comment->reportComment($commentId);
-		Alert::successAlert('Le commentaire à été signalé');
-	}
-	elseif ($moderate->moderation == 2) {
-		Alert::warningAlert('Le commentaire à déjà été signalé');
-	}
-	elseif ($moderate->moderation == 3) {
-		Alert::dangerAlert('Le commentaire à déjà été modéré, merci de contacter un administrateur');
-	}
-	else {
-		Alert::failAlert();
-		header('location:index.php');
-	}
-}
-
-function suppPost($postId) {
-	$post = new Post();
-	$result = $post->suppPost($postId);
-	if ($result > 0) {
-		Alert::successAlert('Le Chapitre a été supprimé avec succès');
-	}
-	else {
-		Alert::failAlert();
-		header('location:index.php?p=admin');
-	}
-}
-
-function suppComment($commentId) {
-	$comment = new Comment();
-	$result = $comment->suppSingleComment($commentId);
-	if ($result > 0) {
-		Alert::successAlert('Le commentaire à été supprimé avec succès');
-	}
-	else {
-		Alert::failAlert();
-		header('location:index.php?p=admin');
-	}
-}
-
-function editPost($title, $content, $postId, $statut, $img, $oldImgName) {
-	$post = new Post();
-
-	if (isset($_SESSION['edit'])) {
-		unset($_SESSION['edit']);
-	}
-
-	if ($img != null && $img['error'] == 0) {
-		$imgClass = new model\core\ImgApp();
-		$imgName = $imgClass->uploadImg($img);
-		if ($imgName == false) {
-			$_SESSION['edit']['postId'] = $postId;
-			$_SESSION['edit']['title'] = $title;
-			$_SESSION['edit']['content'] = $content;
-			$_SESSION['edit']['select'] = $statut;
-			$_SESSION['edit']['img'] = $oldImgName;
-			header('location:index.php?p=admin&e=edit');
-		} else {
-			$result = $post->editPost($title, $content, $postId, $statut, $imgName);
-		}
-	} else {
-		$result = $post->editPost($title, $content, $postId, $statut);
-	}
-
-	if ($result > 0) {
-	 	Alert::successAlert('Le chapitre a été modifié avec succès');
-	}
-	else {
-		Alert::failAlert();
-		header('location:index.php?p=admin');
-	}
-}
-
-function editComment($content, $commentId) {
-	$comment = new Comment();
-	$result = $comment->editComment($content, $commentId);
-	if ($result > 0) {
-	 	Alert::successAlert('Le commentaire a été modifié avec succès');
-	}
-	else {
-		Alert::failAlert();
-		header('location:index.php?p=admin');
-	}
-}
-
-function validComment($commentId) {
-	$comment = new Comment();
-	$moderate = $comment->getModeration($commentId);
-	if ($moderate->moderation == 1 || $moderate->moderation == 2) {
-		$comment->reportComment($commentId);
-		Alert::successAlert('Le commentaire à correctement été validé');
-	}
-	elseif ($moderate->moderation == 3) {
-		Alert::warningAlert('Le commentaire est déjà modéré');
-	}
-	else {
-		Alert::failAlert();
-		header('location:index.php?p=admin');
-	}
-
-	return $comment->validComment($commentId);
 }

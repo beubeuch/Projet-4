@@ -31,7 +31,7 @@ class Post {
 	}
 
 	public function getExcerpt($string) {
-		return substr($string, 0, 400).'...';
+		return substr($string, 0, 500).'...';
 	}
 
 	public function getInfoBar($postId) {

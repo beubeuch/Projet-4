@@ -4,8 +4,10 @@
 			<div class="col-md-12">
 				<h3><?= $chapitre->title; ?></h3>
 				<article>
-					<div class="float-left post-img"><img src="public/images/<?= $imgUrl;?>"></div>
-					<div>
+					<div class="float-md-left text-center post-img">
+						<img src="public/images/<?= $imgUrl;?>" alt="<?= $imgUrl;?>">
+					</div>
+					<div class="text-justify">
 						<?= $chapitre->content; ?>
 					</div>
 				</article>

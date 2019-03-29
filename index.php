@@ -7,6 +7,10 @@ App::init();
 
 // Fonctionnement du site ---------------------------------------------------
 
+if (isset($_GET['contact']) && isset($_POST['messageContact'])) {
+    mailContact($_POST['lastnameContact'], $_POST['firstnameContact'], $_POST['mailContact'], $_POST['messageContact']);
+}
+
 if (isset($_POST['newComment'])) {
     newComment($_GET['postId'], $_POST['newComment'], $_POST['name']);
     header('location:index.php?p=chapitre&postId='.$_GET['id']);
@@ -56,6 +60,9 @@ if(isset($_GET['p'])) {
         }
         elseif ($_GET['p'] == 'chapitre') {
             postPage();
+        }
+        elseif ($_GET['p'] == 'contact') {
+            contactPage();
         }
         elseif ($_GET['p'] == 'admin') {
             if (isset($_GET['disconnect'])) {

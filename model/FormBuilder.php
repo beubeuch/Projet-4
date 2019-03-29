@@ -5,6 +5,17 @@ use model\Post;
 
 class FormBuilder extends core\Form {
 
+	public static function contactForm() {
+		$form = '<form method="post" action="index.php?contact">';
+		$form .= self::text('Nom', 'lastnameContact');
+		$form .= self::text('Prénom', 'firstnameContact');
+		$form .= self::mail('E-mail', 'mailContact');
+		$form .= self::textArea('Message', 'messageContact');
+		$form .= self::submit('Envoyer');
+		$form .= '</form>';
+		return $form;
+	}
+
 	public static function newCommForm($action) {
 		$form = '<form method="post" action="'. $action .'">';
 		$form .= self::text('Nom', 'name');

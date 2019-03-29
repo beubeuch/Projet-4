@@ -17,6 +17,13 @@ class Form {
 				</p>';
 	}
 
+	protected static function mail($label, $name, $content = null) {
+		return 	'<p class="row">
+					<label class="col-md-3">'. $label .'</label>
+					<input type="mail" name="'. $name .'" class="col-md-9" value="'.$content.'" required>
+				</p>';
+	}
+
 	protected static function textArea($label, $name, $content = null, $tinyMce = false) {
 		if ($tinyMce == true) {
 			$id = ' id="tinyEditor"';
