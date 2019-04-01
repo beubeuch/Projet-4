@@ -1,7 +1,3 @@
-<?php
-use model\TableAdmin;
-?>
-
 <div class="row">
 	<div class="d-sm-none d-lg-block col-lg-2">
 		<div class="list-group sticky-top">
@@ -25,43 +21,25 @@ use model\TableAdmin;
 
 		<section class="row">
 			<h2 class="col-lg-12 pt-2 pb-2 sticky-top" id="chap">Chapitres</h2>
-			<?php
-			$chapitreTable = new TableAdmin();
-			$chapitreHead = ['N°', 'Date de publication', 'Date de modification', 'nbr Commentaire', 'Statut', 'Actions'];
-			$chapitreTable->createHead($chapitreHead);
-			$chapitreTable->createPostLines($postList);
-			echo $chapitreTable->getTable(); ?>
+			<?= $chapitreTable->getTable(); ?>
 		</section>
 
 		<section class="row">
 			<h2 class="col-lg-12 mb-4">Commentaires</h2>
-			<?php $head = ['N°', 'Contenu', 'Le', 'Par', 'Billet', 'Modéré', 'Actions']; ?>
 			<div class="col-lg-12">
 				<article class="row">
 					<h3 class="col-lg-12 pl-5 pt-2 pb-2 sticky-top" id="signal">Signalés par un visiteur</h3>
-					<?php
-					$tableSignal = new TableAdmin();
-					$tableSignal->createHead($head);
-					$tableSignal->createCommentLines($commentList, 2);
-					echo $tableSignal->getTable(); ?>
+					<?= $tableSignal->getTable(); ?>
 				</article>
 
 				<article class="row">
 					<h3 class="col-lg-12 pl-5 pt-2 pb-2 sticky-top" id="modere">Modérés</h3>
-					<?php
-					$tableModerate = new TableAdmin();
-					$tableModerate->createHead($head);
-					$tableModerate->createCommentLines($commentList, 3);
-					echo $tableModerate->getTable(); ?>
+					<?= $tableModerate->getTable(); ?>
 				</article>
 
 				<article class="row">
 					<h3 class="col-lg-12 pl-5 pt-2 pb-2 sticky-top" id="all">Tous les commentaires</h3>
-					<?php
-					$tableAll = new TableAdmin();
-					$tableAll->createHead($head);
-					$tableAll->createCommentLines($commentList);
-					echo $tableAll->getTable(); ?>
+					<?= $tableAll->getTable(); ?>
 				</article>
 			</div>
 		</section>

@@ -3,7 +3,7 @@ namespace model;
 
 class Alert {
 
-	protected $fail = 'Une erreur est survenue, merci de réessayer';
+	protected static $fail = 'Une erreur est survenue, merci de réessayer';
 
 	public static function visitorAlert() {
 		if (isset($_SESSION['alert'])) {

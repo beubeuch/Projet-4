@@ -47,26 +47,26 @@ $navActive = isset($_GET['p']) ? $_GET['p'] : 'Accueil';
 	</nav>
 
 	<?php
-	if (!isset($_GET['p']) || $_GET['p'] == 'accueil') {
-		echo '	<div class="container-fluid home-body">
+	if (!isset($_GET['p']) || $_GET['p'] == 'accueil') { ?>
+		<div class="container-fluid home-body">
+			<div class="row">
+				<h1 class="col-md-12 text-center text-white mt-3 mb-5">Billet simple pour l\'Alaska</h1>
+				<div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 author-div mb-5">
 					<div class="row">
-						<h1 class="col-md-12 text-center text-white mt-3 mb-5">Billet simple pour l\'Alaska</h1>
-						<div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 author-div mb-5">
-							<div class="row">
-								<div class="col-sm-12 col-md-3">
-									<img src="public/images/photo_profil.jpg" alt="Photo de Jean Forteroche">
-								</div>
-								<div class="col-sm-12 col-md-9">
-									<h3>Jean Forteroche</h3>
-									<p>Ecrivain depuis 10 ans, je souhaite aujourd\'hui interagir avec les fans à travers ce blog.......</p>
-								</div>
-							</div>
+						<div class="col-sm-12 col-md-3">
+							<img src="public/images/photo_profil.jpg" alt="Photo de Jean Forteroche">
 						</div>
-						<div class="col-xl-12 text-center mb-5 d-none d-md-block">
-							<a href="#chaps" class="btn btn-primary">Commencer la lecture</a>
+						<div class="col-sm-12 col-md-9">
+							<h3>Jean Forteroche</h3>
+							<p>Ecrivain depuis 10 ans, je souhaite aujourd\'hui interagir avec les fans à travers ce blog.......</p>
 						</div>
 					</div>
-				</div>';
+				</div>
+				<div class="col-xl-12 text-center mb-5 d-none d-md-block">
+					<a href="#chaps" class="btn btn-primary">Commencer la lecture</a>
+				</div>
+			</div>
+		</div> <?php
 	} ?>
 	
 	<main class="container-fluid" id="chaps">
@@ -74,7 +74,6 @@ $navActive = isset($_GET['p']) ? $_GET['p'] : 'Accueil';
 		echo model\Alert::visitorAlert();
 		echo $content;
 		?>
-		<a href="projet4.zip">Telecharger .zip</a>
 	</main><!-- /.container -->
 
 

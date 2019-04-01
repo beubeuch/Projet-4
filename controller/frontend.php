@@ -4,6 +4,7 @@ use \model\Comment;
 use \model\User;
 use \model\Alert;
 use \model\FormBuilder;
+use model\TableAdmin;
 
 function homePage() {
 	$titlePage = 'Billet simple pour l\'Alaska';
@@ -70,6 +71,25 @@ function adminPage() {
 		echo Alert::adminSuppAlert($alertMessage, $alertAction);
 	}
 
+	$chapitreTable = new TableAdmin();
+	$chapitreHead = ['N°', 'Date de publication', 'Date de modification', 'nbr Commentaire', 'Statut', 'Actions'];
+	$chapitreTable->createHead($chapitreHead);
+	$chapitreTable->createPostLines($postList);
+
+	$head = ['N°', 'Contenu', 'Le', 'Par', 'Billet', 'Modéré', 'Actions'];
+
+	$tableSignal = new TableAdmin();
+	$tableSignal->createHead($head);
+	$tableSignal->createCommentLines($commentList, 2);
+
+	$tableModerate = new TableAdmin();
+	$tableModerate->createHead($head);
+	$tableModerate->createCommentLines($commentList, 3);
+
+	$tableAll = new TableAdmin();
+	$tableAll->createHead($head);
+	$tableAll->createCommentLines($commentList);
+
 	require 'view/adminView.php';
 }
 
@@ -83,7 +103,7 @@ function editPage() {
 		$post->content = $_SESSION['edit']['content'];
 		$post->img = $_SESSION['edit']['img'];
 	}
-	elseif (isset($_GET['postId']) && $_GET['postId'] > 0) {
+	elseif (isset($_GET['postId']) && $_GET['postId'] >= 0) {
 		$billet = new Post();
 		$postId = $_GET['postId'];
 		$post = $billet->getPost($postId);
